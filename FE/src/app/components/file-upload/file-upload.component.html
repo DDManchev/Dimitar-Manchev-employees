@@ -1,0 +1,142 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-file-earmark-spreadsheet me-2 fs-5"></i>
+            <h4 class="mb-0">Employee Pair Finder</h4>
+          </div>
+          <small class="opacity-75">Find employees who worked together the longest</small>
+        </div>
+        <div class="card-body p-4">
+          <div class="upload-section mb-4">
+            <div class="row align-items-center">
+              <div class="col-md-8">
+                <label class="form-label fw-bold mb-2">
+                  <i class="bi bi-upload text-primary me-1"></i>
+                  Upload Employee Data (CSV)
+                </label>
+                <div class="input-group">
+                  <input type="file" #fileInput class="file-input d-none" (change)="onFileSelected($event)" accept=".csv">
+                  <button type="button" class="btn btn-outline-primary" (click)="triggerFileInput()">
+                    <i class="bi bi-folder2-open me-1"></i> Choose File
+                  </button>
+                  <span class="input-group-text bg-light" *ngIf="fileName; else noFileSelected">
+                    <i class="bi bi-file-check text-success me-1"></i>
+                    {{ fileName }}
+                  </span>
+                  <ng-template #noFileSelected>
+                    <span class="input-group-text text-muted">No file selected</span>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="assets/sample.csv" download class="btn btn-outline-secondary btn-sm">
+                  <i class="bi bi-download me-1"></i> Sample CSV
+                </a>
+              </div>
+            </div>
+            
+            <div class="mt-3">
+              <div class="alert alert-light border-start border-primary border-4 mb-0">
+                <div class="d-flex align-items-start">
+                  <i class="bi bi-info-circle text-primary me-2 mt-1"></i>
+                  <div>
+                    <strong class="text-primary">Required CSV Format:</strong>
+                    <div class="mt-1">
+                      <code class="bg-light px-2 py-1 rounded">EmpID, ProjectID, DateFrom, DateTo</code>
+                    </div>
+                    <small class="text-muted mt-1 d-block">
+                      Supported date formats: YYYY-MM-DD, MM/DD/YYYY, DD/MM/YYYY
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="isLoading" class="text-center py-4">
+            <div class="spinner-border text-primary mb-2" role="status">
+              <span class="visually-hidden">Processing...</span>
+            </div>
+            <div class="text-muted">Processing your file...</div>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-start">
+            <i class="bi bi-exclamation-triangle-fill me-2 mt-1"></i>
+            <div>
+              <strong>Processing Error</strong>
+              <div class="mt-1">{{ errorMessage }}</div>
+            </div>
+          </div>
+
+          <div *ngIf="successMessage" class="alert alert-success d-flex align-items-start">
+            <i class="bi bi-check-circle-fill me-2 mt-1"></i>
+            <div>
+              <strong>Success!</strong>
+              <div class="mt-1">{{ successMessage }}</div>
+            </div>
+          </div>
+          
+          <div *ngIf="longestPair" class="results-section mt-4">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-people-fill text-success me-2 fs-5"></i>
+              <h5 class="mb-0 text-success">Longest Working Pair Found</h5>
+            </div>
+
+            <div class="card bg-success bg-opacity-10 border-success mb-4">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-md-8">
+                    <h6 class="text-success mb-1">Top Collaboration</h6>
+                    <div class="fs-5">
+                      <strong class="text-primary">Employee #{{ longestPair.employee1Id }}</strong> 
+                      <span class="text-muted mx-2">and</span>
+                      <strong class="text-primary">Employee #{{ longestPair.employee2Id }}</strong>
+                    </div>
+                  </div>
+                  <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                    <div class="badge bg-success fs-6 px-3 py-2">
+                      <i class="bi bi-calendar-check me-1"></i>
+                      {{ longestPair.totalDaysWorked }} days total
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-section">
+              <h6 class="mb-3">
+                <i class="bi bi-list-task me-1"></i>
+                Project Collaboration Details
+              </h6>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-dark">
+                    <tr>
+                      <th><i class="bi bi-person me-1"></i>Employee #1</th>
+                      <th><i class="bi bi-person me-1"></i>Employee #2</th>
+                      <th><i class="bi bi-briefcase me-1"></i>Project ID</th>
+                      <th><i class="bi bi-calendar-range me-1"></i>Days Worked</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let project of longestPair.projects">
+                      <td><span class="badge bg-primary">{{ project.employee1Id }}</span></td>
+                      <td><span class="badge bg-primary">{{ project.employee2Id }}</span></td>
+                      <td><strong>{{ project.projectId }}</strong></td>
+                      <td>
+                        <span class="badge bg-success">{{ project.daysWorked }} days</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
