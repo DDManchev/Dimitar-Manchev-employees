@@ -9,7 +9,6 @@ This Angular application identifies pairs of employees who have worked together 
 - Automatic calculation of the longest working employee pair
 - Display of all common projects with days worked
 - Responsive design
-- Optional back-end integration with Spring Boot API
 
 ## Requirements
 
@@ -33,7 +32,6 @@ employee-pair-finder/
 │   │   └── app.module.ts          # Main app module
 │   ├── assets/                    # Static assets
 │   │   ├── sample.csv             # Sample CSV file
-│   │   └── test-edge-cases.csv    # Test file with edge cases
 │   ├── environments/              # Environment configurations
 │   ├── index.html                 # Main HTML file
 │   ├── main.ts                    # Main entry point
@@ -81,26 +79,6 @@ EmpID, ProjectID, DateFrom, DateTo
 2. The application parses the CSV and identifies employee pairs who worked on the same projects
 3. For each pair, it calculates the overlapping time periods on each project
 4. The pair with the longest total overlapping time is displayed along with all their common projects
-
-## Back-End Integration
-
-The application can work in two modes:
-
-### Standalone Mode
-- CSV processing happens entirely in the browser
-- No server dependencies required
-- Suitable for quick testing and deployment
-
-### Back-End Integrated Mode
-- Automatically detects if the Spring Boot back-end is running on port 8080
-- Provides an option to use the back-end for CSV processing
-- Communicates with the back-end API for file upload and data retrieval
-- Back-end configuration:
-  - Spring Boot application running on port 8080
-  - H2 in-memory database
-  - Username: sa
-  - Password: password
-  - H2 console available at http://localhost:8080/h2-console
 
 ## Supported Date Formats
 
